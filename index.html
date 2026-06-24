@@ -180,11 +180,11 @@
   .mailbtn{display:inline-block;font-size:clamp(17px,2.3vw,23px);font-weight:500;color:var(--text);border-bottom:2px solid var(--accent);padding-bottom:6px}
 
   /* reveal */
-  .r{opacity:0;transform:translateY(34px);transition:opacity .85s cubic-bezier(.2,.7,.2,1),transform .85s cubic-bezier(.2,.7,.2,1)}
+  .r{opacity:0;transform:translateY(34px);transition:opacity 1.2s cubic-bezier(.2,.7,.2,1),transform 1.2s cubic-bezier(.2,.7,.2,1)}
   .sec.in .r{opacity:1;transform:none}
-  .sec.in .r.d1{transition-delay:.1s}.sec.in .r.d2{transition-delay:.2s}.sec.in .r.d3{transition-delay:.3s}
-  .sec.in .r.d4{transition-delay:.4s}.sec.in .r.d5{transition-delay:.5s}.sec.in .r.d6{transition-delay:.6s}
-  .rx{opacity:0;transform:translateX(-30px);transition:opacity .8s,transform .8s}
+  .sec.in .r.d1{transition-delay:.14s}.sec.in .r.d2{transition-delay:.28s}.sec.in .r.d3{transition-delay:.42s}
+  .sec.in .r.d4{transition-delay:.56s}.sec.in .r.d5{transition-delay:.7s}.sec.in .r.d6{transition-delay:.84s}
+  .rx{opacity:0;transform:translateX(-30px);transition:opacity 1.15s,transform 1.15s}
   .sec.in .rx{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){.r,.rx{opacity:1;transform:none;transition:none}.blob{display:none}.scrollhint .ch{animation:none}}
 </style>
@@ -399,7 +399,7 @@
   function countUp(el){
     if(el.dataset.done)return;el.dataset.done=1;
     const target=+el.dataset.count;let n=0;const step=Math.max(1,Math.round(target/24));
-    const t=setInterval(()=>{n+=step;if(n>=target){n=target;clearInterval(t);}el.textContent=n;},30);
+    const t=setInterval(()=>{n+=step;if(n>=target){n=target;clearInterval(t);}el.textContent=n;},48);
   }
 
   // navigation
