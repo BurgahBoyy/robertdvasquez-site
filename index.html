@@ -32,7 +32,7 @@
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .6s ease,color .6s ease;overflow-x:hidden}
-  #scroller{height:100vh;overflow-y:scroll;overflow-x:hidden;scroll-snap-type:y mandatory;scroll-behavior:smooth;perspective:1px}
+  #scroller{height:100vh;overflow-y:scroll;overflow-x:hidden;scroll-snap-type:y proximity;scroll-behavior:smooth}
   ::selection{background:var(--accent);color:var(--on-accent)}
   ::-webkit-scrollbar{width:0}
   a{color:inherit;text-decoration:none}
@@ -52,15 +52,15 @@
   .theme-toggle .moon{display:none}.light .theme-toggle .moon{display:block}.light .theme-toggle .sun{display:none}
   @media(max-width:860px){.nav-links{display:none}}
 
-  /* progress bar + rail */
   #bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));z-index:90;transition:width .1s linear}
   .rail{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:80;display:flex;flex-direction:column;gap:13px}
-  .rail i{width:8px;height:8px;border-radius:50%;background:var(--line);cursor:pointer;transition:.3s;position:relative}
+  .rail i{width:8px;height:8px;border-radius:50%;background:var(--line);cursor:pointer;transition:.3s}
   .rail i.on{background:var(--accent);transform:scale(1.3);box-shadow:0 0 10px var(--accent)}
   @media(max-width:680px){.rail{display:none}}
 
-  /* sections */
-  .sec{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;position:relative;padding:96px 0 70px;overflow:hidden}
+  /* tall sections with pinned content = scroll resistance */
+  .sec{height:200vh;scroll-snap-align:start;position:relative}
+  .sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:96px 0 70px}
   .blob{position:absolute;border-radius:50%;filter:blur(85px);opacity:.7;z-index:0;pointer-events:none;will-change:transform}
   .blob.a{width:520px;height:520px;background:radial-gradient(circle,var(--blob-1),transparent 70%);top:-130px;right:-70px}
   .blob.b{width:420px;height:420px;background:radial-gradient(circle,var(--blob-2),transparent 70%);bottom:-150px;left:-110px}
@@ -89,7 +89,7 @@
   .hero-meta .pin{width:5px;height:5px;border-radius:50%;background:var(--accent)}
   .photo{position:relative;border-radius:18px;overflow:hidden;background:var(--surface);border:1px solid var(--line);aspect-ratio:4/5;max-height:64vh}
   .photo img{width:100%;height:100%;object-fit:cover;display:block}
-  .scrollhint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:3;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:8px}
+  .scrollhint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:3;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:8px}
   .scrollhint .ch{width:18px;height:18px;border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(45deg);animation:bob 1.8s infinite}
   @keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}50%{transform:rotate(45deg) translate(4px,4px);opacity:1}}
 
@@ -98,8 +98,8 @@
   .card{position:relative;border:1px solid var(--line);border-radius:16px;padding:26px;background:var(--surface);overflow:hidden;transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s}
   .card:hover{transform:translateY(-6px);box-shadow:0 26px 60px -30px rgba(0,0,0,.5)}
   .card.flag{background:var(--invert-bg);color:var(--invert-text);border-color:var(--invert-bg)}
-  .card.flag .gl{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 65%);filter:blur(45px);bottom:-200px;right:-120px;opacity:0;transition:opacity 1.1s ease}
-  .sec.in .card.flag .gl{opacity:.9}
+  .card.flag .gl{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 65%);filter:blur(45px);bottom:-200px;right:-120px;opacity:0;transition:opacity 1.3s ease}
+  .sticky.in .card.flag .gl{opacity:.9}
   .card .kick{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;opacity:.62;margin-bottom:12px;position:relative}
   .card h3{font-family:var(--serif);font-weight:400;font-size:clamp(22px,2.4vw,30px);line-height:1.08;letter-spacing:-.01em;margin-bottom:11px;position:relative}
   .card p{font-size:14px;line-height:1.5;color:var(--text-soft);position:relative}
@@ -179,13 +179,12 @@
   #contact h2 .accent{color:var(--accent);font-style:italic}
   .mailbtn{display:inline-block;font-size:clamp(17px,2.3vw,23px);font-weight:500;color:var(--text);border-bottom:2px solid var(--accent);padding-bottom:6px}
 
-  /* reveal */
   .r{opacity:0;transform:translateY(34px);transition:opacity 1.2s cubic-bezier(.2,.7,.2,1),transform 1.2s cubic-bezier(.2,.7,.2,1)}
-  .sec.in .r{opacity:1;transform:none}
-  .sec.in .r.d1{transition-delay:.14s}.sec.in .r.d2{transition-delay:.28s}.sec.in .r.d3{transition-delay:.42s}
-  .sec.in .r.d4{transition-delay:.56s}.sec.in .r.d5{transition-delay:.7s}.sec.in .r.d6{transition-delay:.84s}
+  .sticky.in .r{opacity:1;transform:none}
+  .sticky.in .r.d1{transition-delay:.14s}.sticky.in .r.d2{transition-delay:.28s}.sticky.in .r.d3{transition-delay:.42s}
+  .sticky.in .r.d4{transition-delay:.56s}.sticky.in .r.d5{transition-delay:.7s}.sticky.in .r.d6{transition-delay:.84s}
   .rx{opacity:0;transform:translateX(-30px);transition:opacity 1.15s,transform 1.15s}
-  .sec.in .rx{opacity:1;transform:none}
+  .sticky.in .rx{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){.r,.rx{opacity:1;transform:none;transition:none}.blob{display:none}.scrollhint .ch{animation:none}}
 </style>
 </head>
@@ -210,7 +209,7 @@
 
 <div id="scroller">
 
-  <section class="sec" id="home">
+  <section class="sec" id="home"><div class="sticky">
     <div class="blob a" data-par="0.25"></div><div class="blob b" data-par="-0.18"></div>
     <div class="wrap pc">
       <div class="hero-grid">
@@ -230,9 +229,9 @@
       </div>
     </div>
     <div class="scrollhint">Scroll<div class="ch"></div></div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="building">
+  <section class="sec" id="building"><div class="sticky">
     <div class="blob a" data-par="0.3"></div>
     <div class="wrap pc">
       <div class="sec-head r"><span class="sec-num">01</span><span class="sec-label">Building Now</span></div>
@@ -243,9 +242,9 @@
         <div class="card r d3"><div class="kick">FactorFox Ingestion App</div><h3>A financial document app I built in 4 hours.</h3><p>Reads years of financial data in any structure and turns it into a clean, machine-readable feed. Cut client onboarding from about 6 months to about 6 hours.</p><div class="tagrow"><span class="pill live"><span class="pd"></span>In Production</span><span class="tag">Built in 4 hrs</span></div></div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="shipped">
+  <section class="sec" id="shipped"><div class="sticky">
     <div class="blob b" data-par="0.22"></div>
     <div class="wrap pc">
       <div class="sec-head r"><span class="sec-num">02</span><span class="sec-label">Shipped 0&rarr;1</span></div>
@@ -257,9 +256,9 @@
         <div class="prod r d4"><div class="ptop"><span class="ptags">Web Design &middot; Freelance</span><span class="pill live"><span class="pd"></span>5 sites</span></div><h4>Web Design</h4><p>Designed and shipped 5 live sites: my own, Sail, FactorFox, FactorEvo, and a yoga studio, plus years of variants.</p></div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="wins">
+  <section class="sec" id="wins"><div class="sticky">
     <div class="blob a" data-par="0.28"></div>
     <div class="wrap pc">
       <div class="sec-head r"><span class="sec-num">03</span><span class="sec-label">Achievements</span></div>
@@ -270,9 +269,9 @@
         <div class="win r d3"><div class="big"><span class="u" data-count="6">0</span> products in 2 years</div><p>Built solo. Plus 5 live sites and 6 AI kits.</p></div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="photos">
+  <section class="sec" id="photos"><div class="sticky">
     <div class="wrap pc">
       <div class="sec-head r"><span class="sec-num">04</span><span class="sec-label">Moments</span></div>
       <h2 class="sec-title r">In the room.</h2>
@@ -282,9 +281,9 @@
         <div class="photo r d3"><img src="assets/moment-3.jpg" alt="Robert Vasquez" onerror="this.style.display='none'"></div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="experience">
+  <section class="sec" id="experience"><div class="sticky">
     <div class="blob b" data-par="0.2"></div>
     <div class="wrap pc">
       <div class="sec-head r"><span class="sec-num">05</span><span class="sec-label">Experience</span></div>
@@ -299,9 +298,9 @@
         <div class="exp-row rx d4"><div class="when">Since 2023</div><div><h5>Web Design</h5><div class="role">Freelance &amp; In-House</div></div></div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="approach">
+  <section class="sec" id="approach"><div class="sticky">
     <div class="blob a" data-par="0.26"></div>
     <div class="wrap pc">
       <div class="sec-head r"><span class="sec-num">06</span><span class="sec-label">What I Do</span></div>
@@ -314,9 +313,9 @@
         <div class="mode r d5"><div class="mi">05</div><div><h4>Build the leverage, not just the product.</h4><p>Connectors, coordination protocols, automation that automates itself. I invest in how the work gets done.</p></div></div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="aios">
+  <section class="sec" id="aios"><div class="sticky">
     <div class="blob b" data-par="0.24"></div>
     <div class="wrap pc">
       <div class="sec-head r"><span class="sec-num">07</span><span class="sec-label">AI Operating System</span></div>
@@ -336,9 +335,9 @@
       </div>
       <p class="disc r d4"><b>The discipline:</b> generic engine plus one concrete example &middot; a safe front door &middot; credentials never ship &middot; tested offline, recorded, repeatable.</p>
     </div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="education">
+  <section class="sec" id="education"><div class="sticky">
     <div class="blob a" data-par="0.2"></div>
     <div class="wrap pc">
       <div class="sec-head r"><span class="sec-num">08</span><span class="sec-label">Education</span></div>
@@ -356,9 +355,9 @@
         </div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <section class="sec" id="contact">
+  <section class="sec" id="contact"><div class="sticky">
     <div class="blob a" data-par="0.3"></div><div class="blob b" data-par="-0.2"></div>
     <div class="wrap pc">
       <div class="eyebrow r"><span class="ln"></span>Say hello<span class="ln"></span></div>
@@ -368,45 +367,42 @@
         <a class="btn" href="Robert_Vasquez_Proof_Sheet.pdf" target="_blank" rel="noopener">View proof sheet &rarr;</a>
       </div>
     </div>
-  </section>
+  </div></section>
 
 </div>
 
 <script>
   const scroller=document.getElementById('scroller');
   const secs=[...document.querySelectorAll('.sec')];
+  const stickies=[...document.querySelectorAll('.sticky')];
   const rail=document.getElementById('rail');
   const bar=document.getElementById('bar');
   const navlinks=[...document.querySelectorAll('.nav-links a')];
   secs.forEach((s,i)=>{const d=document.createElement('i');d.dataset.idx=i;d.title=s.id;rail.appendChild(d);});
   const dots=[...rail.children];
 
-  // reveal + active section via IntersectionObserver
   const io=new IntersectionObserver((es)=>{
     es.forEach(e=>{
-      if(e.isIntersecting){
+      if(e.isIntersecting&&e.intersectionRatio>=0.5){
         e.target.classList.add('in');
-        const i=secs.indexOf(e.target);
+        const i=stickies.indexOf(e.target);
         dots.forEach((d,k)=>d.classList.toggle('on',k===i));
-        navlinks.forEach(a=>a.classList.toggle('on',a.dataset.to===e.target.id));
+        navlinks.forEach(a=>a.classList.toggle('on',a.dataset.to===secs[i].id));
         e.target.querySelectorAll('[data-count]').forEach(countUp);
       }
     });
-  },{root:scroller,threshold:.55});
-  secs.forEach(s=>io.observe(s));
+  },{root:scroller,threshold:[0.5,0.75]});
+  stickies.forEach(s=>io.observe(s));
 
-  // count up
   function countUp(el){
     if(el.dataset.done)return;el.dataset.done=1;
     const target=+el.dataset.count;let n=0;const step=Math.max(1,Math.round(target/24));
     const t=setInterval(()=>{n+=step;if(n>=target){n=target;clearInterval(t);}el.textContent=n;},48);
   }
 
-  // navigation
   function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});}
   document.addEventListener('click',e=>{const t=e.target.closest('[data-to]');if(t){e.preventDefault();goTo(t.dataset.to);}const d=e.target.closest('.rail i');if(d){secs[+d.dataset.idx].scrollIntoView({behavior:'smooth'});}});
 
-  // scroll-driven: progress bar + parallax
   let ticking=false;
   function onScroll(){
     const max=scroller.scrollHeight-scroller.clientHeight;
@@ -414,10 +410,11 @@
     const vh=scroller.clientHeight;
     secs.forEach(s=>{
       const rect=s.getBoundingClientRect();
-      const center=rect.top+rect.height/2-vh/2;
+      const span=rect.height-vh;
+      const prog=span>0?Math.min(1,Math.max(0,-rect.top/span)):0;
       s.querySelectorAll('[data-par]').forEach(el=>{
         const f=parseFloat(el.dataset.par);
-        el.style.transform='translate3d(0,'+(center*f)+'px,0)';
+        el.style.transform='translate3d(0,'+((prog-0.5)*150*f)+'px,0)';
       });
     });
     ticking=false;
@@ -425,13 +422,11 @@
   scroller.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(onScroll);}},{passive:true});
   onScroll();
 
-  // theme
   const root=document.documentElement;
   try{if(localStorage.getItem('theme')==='light')root.classList.add('light');}catch(e){}
   document.getElementById('themeToggle').addEventListener('click',()=>{root.classList.toggle('light');try{localStorage.setItem('theme',root.classList.contains('light')?'light':'dark');}catch(e){}});
 
-  // ensure first section reveals immediately
-  secs[0].classList.add('in');
+  stickies[0].classList.add('in');
 </script>
 </body>
 </html>
