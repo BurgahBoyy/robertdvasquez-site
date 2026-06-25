@@ -188,10 +188,12 @@
   @media(prefers-reduced-motion:reduce){.r,.rx{opacity:1;transform:none;transition:none}.blob{display:none}.scrollhint .ch{animation:none}}
   @media(max-width:760px){
     #scroller{scroll-snap-type:none}
-    .sec{height:auto;min-height:100vh;scroll-snap-align:none}
-    .sticky{position:static;height:auto;min-height:100vh;overflow:visible;padding:92px 0 54px}
+    .sec{height:auto;min-height:0;scroll-snap-align:none;scroll-margin-top:64px}
+    .sticky{position:static;height:auto;min-height:0;overflow:visible;justify-content:flex-start;padding:44px 0 54px}
+    .sec:first-child .sticky{padding-top:104px}
     .scrollhint{display:none}
     .r,.rx{opacity:1;transform:none;transition:none}
+    .blob{display:none}
     h1.title{font-size:clamp(46px,15vw,72px)}
   }
 </style>
@@ -415,6 +417,7 @@
   function onScroll(){
     const max=scroller.scrollHeight-scroller.clientHeight;
     bar.style.width=(max>0?(scroller.scrollTop/max*100):0)+'%';
+    if(window.innerWidth<=760){ticking=false;return;}
     const vh=scroller.clientHeight;
     secs.forEach(s=>{
       const rect=s.getBoundingClientRect();
@@ -439,4 +442,5 @@
 </script>
 </body>
 </html>
+
 
