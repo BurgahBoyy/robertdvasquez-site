@@ -186,6 +186,14 @@
   .rx{opacity:0;transform:translateX(-30px);transition:opacity 1.15s,transform 1.15s}
   .sticky.in .rx{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){.r,.rx{opacity:1;transform:none;transition:none}.blob{display:none}.scrollhint .ch{animation:none}}
+  @media(max-width:760px){
+    #scroller{scroll-snap-type:none}
+    .sec{height:auto;min-height:100vh;scroll-snap-align:none}
+    .sticky{position:static;height:auto;min-height:100vh;overflow:visible;padding:92px 0 54px}
+    .scrollhint{display:none}
+    .r,.rx{opacity:1;transform:none;transition:none}
+    h1.title{font-size:clamp(46px,15vw,72px)}
+  }
 </style>
 </head>
 <body>
@@ -427,6 +435,8 @@
   document.getElementById('themeToggle').addEventListener('click',()=>{root.classList.toggle('light');try{localStorage.setItem('theme',root.classList.contains('light')?'light':'dark');}catch(e){}});
 
   stickies[0].classList.add('in');
+  if(window.matchMedia('(max-width:760px)').matches){document.querySelectorAll('.sticky').forEach(function(s){s.classList.add('in');});document.querySelectorAll('[data-count]').forEach(function(el){el.textContent=el.dataset.count;});}
 </script>
 </body>
 </html>
+
